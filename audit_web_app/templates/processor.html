@@ -1,54 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Processor</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { padding-top: 56px; background-color: #f8f9fa; }
-        .nav-item { margin-right: 10px; }
-        textarea { min-height: 300px; font-family: monospace; }
-        .flash-messages { position: fixed; top: 70px; right: 20px; z-index: 1000; }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">ISO Compliance Analyzer</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('processor') }}">Data Processor</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+{% extends "base.html" %}
 
-    <div class="container mt-5">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h2 class="mb-0">Audit Data Processor</h2>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="{{ url_for('processor') }}">
-                    <div class="mb-3">
-                        <label for="json_input" class="form-label">Enter JSON Data:</label>
-                        <textarea class="form-control" id="json_input" name="json_input" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Process Data</button>
-                </form>
-                
-                <div class="mt-4">
-                    <h5>Example JSON Format:</h5>
-                    <pre class="bg-light p-3 rounded">{
+{% block head %}
+{{ super() }}
+<style>
+    textarea { 
+        min-height: 300px; 
+        font-family: monospace; 
+        white-space: pre-wrap;
+    }
+    .flash-messages {
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        z-index: 1000;
+    }
+    pre {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        border: 1px solid #dee2e6;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Audit Data Processor</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('processor') }}">
+                <div class="mb-3">
+                    <label for="json_input" class="form-label">Enter JSON Data:</label>
+                    <textarea 
+                        class="form-control" 
+                        id="json_input" 
+                        name="json_input" 
+                        required
+                        placeholder='Paste your JSON data here...'></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Audit Report</button>
+            </form>
+            
+            <div class="mt-4">
+                <h5>Example JSON Format:</h5>
+                <pre>{
   "Null Hypothesis": [
     {
       "work_instruction": "INS-1000",
@@ -56,7 +53,7 @@
       "statistical_test": "t(14)=6.44",
       "p_value": "0.002",
       "effect_size": "η²=0.71",
-      "compliance": "✅ Pass"
+      "compliance": "Pass"
     }
   ],
   "Material Evidence": [
@@ -85,32 +82,19 @@
     }
   ]
 }</pre>
-                </div>
             </div>
         </div>
     </div>
+</div>
+{% endblock %}
 
-    <div class="flash-messages">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                new bootstrap.Alert(alert).close();
-            });
-        }, 5000);
-    </script>
-</body>
-</html>
+{% block scripts %}
+<script>
+    // Auto-dismiss alerts after 5 seconds
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => {
+            new bootstrap.Alert(alert).close();
+        });
+    }, 5000);
+</script>
+{% endblock %}

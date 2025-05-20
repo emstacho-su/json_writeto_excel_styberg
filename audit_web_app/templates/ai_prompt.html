@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}AI Prompt - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Scientific Audit Protocol</h1>
+    
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            ISO 9001:2015 Compliance Analysis Framework
+        </div>
+        <div class="card-body p-0">
+            <pre class="m-0 p-4" style="font-family: monospace; white-space: pre-wrap; line-height: 1.4;">
+
+Optimized ISO 9001:2015 Scientific Audit Prompt
+(With JSON Output & Cross-Doc Context from Work Instruction List)
+═══════════════════════════════════════════════
+
+1. Audit Context
+────────────────
+• Start Point: Provide full text of specific work instruction (e.g., INS-1000, INS-2800)
+• Reference: Use complete work instruction list to:
+  - Cross-reference compliance issues
+  - Track CAPA longitudinally
+  - Validate inter-document relationships
+
+2. Scientific Hypothesis Framework
+──────────────────────────────────
+For each ISO 9001:2015 clause:
+• H₀: Document fully satisfies Clause X.Y requirements
+• H₁: Significant compliance gap exists
+• α = 0.05 (Bonferroni-adjusted for multiple comparisons)
+
+3. Evidence Grading Scale
+─────────────────────────
+Grade │ Criteria                     │ Confidence Interval
+──────┼──────────────────────────────┼─────────────────────
+A++   │ Direct quote + cross-val      │ 97–100%
+A+    │ Direct quote/procedure only   │ 90–96%
+B     │ Implied alignment            │ 80–89%
+
+4. Work Instruction Utilization
+───────────────────────────────
+• Cross-document validation
+• Longitudinal trend analysis
+• Clause relevance filtering
+• Special case handling:
+  - INS-2800 series: Heat treat focus
+  - INS-5000 series: Calibration focus
+
+5. Heat Treat-Specific Checks
+─────────────────────────────
+• AMS 2750E compliance verification
+• ΔT monitoring validation
+• CQI-9 scoring analysis (optional)
+• Traceability (Clause 8.5.2)
+
+6. JSON Output Structure
+────────────────────────
+{
+  "Null Hypothesis": [
+    {
+      "work_instruction": "INS-XXXX",
+      "clause": "X.Y",
+      "statistical_test": "test_type=value",
+      "p_value": "numeric_value",
+      "effect_size": "numeric_value",
+      "compliance": "pass/reject/monitor/NA"
+    }
+  ],
+  "Material Evidence": [
+    {
+      "work_instruction": "INS-XXXX",
+      "clause": "X.Y",
+      "evidence_summary": "key process element",
+      "evidence_grade": "A++/A+/B",
+      "coverage": "confidence_interval ± range"
+    }
+  ],
+  "Gap Severity": [
+    {
+      "work_instruction": "INS-XXXX",
+      "clause": "X.Y",
+      "gap_severity": 1–5,
+      "gap_description": "clear deficiency explanation"
+    }
+  ],
+  "Longitudinal Tracking": [
+    {
+      "work_instruction": "INS-XXXX",
+      "metric": "Metric Name",
+      "value": "numeric/statistical result",
+      "longitudinal_notes": "systemic trend analysis"
+    }
+  ]
+}</pre>
+        </div>
+    </div>
+</div>
+{% endblock %}

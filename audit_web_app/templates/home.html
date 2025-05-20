@@ -1,38 +1,151 @@
 {% extends "base.html" %}
 
+{% block head %}
+{{ super() }}
+<style>
+    body { padding-top: 56px; background-color: #f8f9fa; }
+    .card { margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .card-header { font-weight: bold; }
+    .highlight { background-color: #fff3cd; padding: 15px; border-radius: 5px; }
+    .table { margin-top: 20px; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="mt-4">
+<div class="container mt-5">
     <h1 class="mb-4">Null Hypothesis Testing for ISO 9001 Compliance</h1>
     
     <div class="card">
-        <div class="card-header">Compliance Status Legend</div>
+        <div class="card-header bg-info text-white">Conceptual Overview</div>
+        <div class="card-body">
+            <p>We apply this to each ISO 9001 clause that should be covered by the work instruction:</p>
+            <div class="highlight">
+                <strong>Null Hypothesis (H₀):</strong> The document fully satisfies Clause X.Y requirements.<br>
+                <strong>Alternative (H₁):</strong> A significant compliance gap exists.
+            </div>
+            <p class="mt-3">Statistical tests are derived from either:</p>
+            <ul>
+                <li>Direct absence/presence of requirements</li>
+                <li>Content quality, weighted by:
+                    <ul>
+                        <li>Direct quotes (strongest)</li>
+                        <li>Paraphrased alignment</li>
+                        <li>Cross-document linkage</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>p-values indicate whether the null hypothesis can be rejected (gap exists) or not.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">Evidence Grading</div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Grade</th>
+                                <th>Definition</th>
+                                <th>Used For...</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>A++</td>
+                                <td>Direct quote + cross-doc validation</td>
+                                <td>Gold standard for audit confidence</td>
+                            </tr>
+                            <tr>
+                                <td>A+</td>
+                                <td>Clear direct quote within the doc</td>
+                                <td>Very strong material support</td>
+                            </tr>
+                            <tr>
+                                <td>B</td>
+                                <td>Indirect/implied alignment</td>
+                                <td>Weak or inferred coverage</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">Statistical Effect Sizes</div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Metric</th>
+                                <th>Meaning</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cohen's d/Hedges' g</td>
+                                <td>Effect size for coverage differences</td>
+                            </tr>
+                            <tr>
+                                <td>η² (Eta squared)</td>
+                                <td>Proportion of variance explained</td>
+                            </tr>
+                            <tr>
+                                <td>β (Beta)</td>
+                                <td>Probability of false negative</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header bg-danger text-white">Criticality Score Interpretation</div>
         <div class="card-body">
             <table class="table table-bordered">
                 <thead class="table-light">
                     <tr>
-                        <th>Status</th>
+                        <th>Score Range</th>
                         <th>Meaning</th>
+                        <th>Compliance Risk</th>
+                        <th>Audit Priority</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-success">
-                        <td>Pass</td>
-                        <td>Full compliance with requirements</td>
+                    <tr class="table-danger">
+                        <td>4.0-5.0</td>
+                        <td>Extremely Critical</td>
+                        <td>Very Low Compliance</td>
+                        <td>Immediate Action</td>
                     </tr>
                     <tr class="table-warning">
-                        <td>Monitor</td>
-                        <td>Potential issues requiring observation</td>
+                        <td>3.0-3.9</td>
+                        <td>High Criticality</td>
+                        <td>Partial Compliance</td>
+                        <td>High Priority</td>
                     </tr>
-                    <tr class="table-danger">
-                        <td>Reject</td>
-                        <td>Significant non-compliance found</td>
+                    <tr class="table-info">
+                        <td>2.0-2.9</td>
+                        <td>Moderate Criticality</td>
+                        <td>Minor Nonconformities</td>
+                        <td>Medium Priority</td>
                     </tr>
-                    <tr>
-                        <td>N/A</td>
-                        <td>Not applicable to this clause</td>
+                    <tr class="table-success">
+                        <td>1.0-1.9</td>
+                        <td>Low Criticality</td>
+                        <td>Fully Compliant</td>
+                        <td>Routine Monitoring</td>
                     </tr>
                 </tbody>
             </table>
+            <div class="alert alert-info mt-3">
+                <strong>Why High Scores = Low Compliance:</strong> Based on FMEA Risk Priority Numbers combining Severity (S), Occurrence (O), and Detection (D) factors.
+            </div>
         </div>
     </div>
 </div>
