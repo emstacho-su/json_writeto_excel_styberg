@@ -7,11 +7,12 @@ import os
 app = Flask(__name__)
 app.secret_key = 'secure-key'  # Required for flashing messages
 
-# Save path to OneDrive (your provided path)
+# Path to OneDrive and Excel file
 ONEDRIVE_PATH = r"C:\Users\estachowiak\OneDrive - styberg.com"
 EXCEL_FILENAME = "audit_data.xlsx"
 EXCEL_PATH = os.path.join(ONEDRIVE_PATH, EXCEL_FILENAME)
 
+# Mapping of Excel sheet names to expected columns
 SHEET_MAP = {
     "Null Hypothesis": ["work_instruction", "clause", "statistical_test", "p_value", "effect_size", "compliance"],
     "Material Evidence": ["work_instruction", "clause", "evidence_summary", "evidence_grade", "coverage"],
@@ -51,6 +52,7 @@ def index():
             writer.save()
             writer.close()
             flash("✅ Data successfully written to your OneDrive Excel file.", 'success')
+
         except json.JSONDecodeError:
             flash("Invalid JSON input. Please check your formatting.", 'error')
         except Exception as e:
@@ -60,5 +62,7 @@ def index():
 
     return render_template('index.html')
 
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    # Important for platforms like Render
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
