@@ -1,24 +1,59 @@
 from flask import Flask, render_template, request, redirect, flash
 import pandas as pd
 import json
-from openpyxl import load_workbook
+from openpyxl import load_workbook, Workbook
 import os
 
+# For file save dialog
+import tkinter as tk
+from tkinter import filedialog
+
 app = Flask(__name__)
-app.secret_key = 'secure-key'  # Required for flashing messages
+app.secret_key = 'secure-key'
 
-# Path to OneDrive and Excel file
-ONEDRIVE_PATH = r"C:\Users\estachowiak\OneDrive - styberg.com"
 EXCEL_FILENAME = "audit_data.xlsx"
-EXCEL_PATH = os.path.join(ONEDRIVE_PATH, EXCEL_FILENAME)
+EXCEL_PATH = None  # Will be set dynamically on first save
 
-# Mapping of Excel sheet names to expected columns
 SHEET_MAP = {
     "Null Hypothesis": ["work_instruction", "clause", "statistical_test", "p_value", "effect_size", "compliance"],
     "Material Evidence": ["work_instruction", "clause", "evidence_summary", "evidence_grade", "coverage"],
-    "Gap Severity": ["work_instruction", "clause", "gap_severity", "gap_description"],
+    "Gap Severity": ["work_instruction", "clause": "gap_severity", "gap_description"],
     "Longitudinal Tracking": ["work_instruction", "metric", "value", "longitudinal_notes"]
 }
+
+
+def get_excel_path():
+    global EXCEL_PATH
+
+    if EXCEL_PATH and os.path.exists(EXCEL_PATH):
+        return EXCEL_PATH
+
+    # Ask user where to save the Excel file
+    root = tk.Tk()
+    root.withdraw()
+    file_path = filedialog.asksaveasfilename(
+        defaultextension=".xlsx",
+        filetypes=[("Excel files", "*.xlsx")],
+        title="Select location to save audit_data.xlsx",
+        initialfile=EXCEL_FILENAME
+    )
+
+    if file_path:
+        # Create blank workbook with all expected sheets
+        wb = Workbook()
+        ws = wb.active
+        ws.title = list(SHEET_MAP.keys())[0]
+
+        # Add the remaining sheets
+        for sheet_name in list(SHEET_MAP.keys())[1:]:
+            wb.create_sheet(title=sheet_name)
+
+        wb.save(file_path)
+        EXCEL_PATH = file_path
+        return file_path
+    else:
+        return None
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -27,12 +62,13 @@ def index():
         try:
             data = json.loads(json_data)
 
-            if not os.path.exists(EXCEL_PATH):
-                flash(f"Excel file not found at:\n{EXCEL_PATH}", 'error')
+            path = get_excel_path()
+            if not path:
+                flash("Save cancelled. No Excel file was created.", 'error')
                 return redirect('/')
 
-            book = load_workbook(EXCEL_PATH)
-            writer = pd.ExcelWriter(EXCEL_PATH, engine='openpyxl', mode='a', if_sheet_exists='overlay')
+            book = load_workbook(path)
+            writer = pd.ExcelWriter(path, engine='openpyxl', mode='a', if_sheet_exists='overlay')
             writer.book = book
 
             for sheet, columns in SHEET_MAP.items():
@@ -43,7 +79,7 @@ def index():
                 df_new = df_new[columns]
 
                 if sheet in book.sheetnames:
-                    df_existing = pd.read_excel(EXCEL_PATH, sheet_name=sheet)
+                    df_existing = pd.read_excel(path, sheet_name=sheet)
                     df_combined = pd.concat([df_existing, df_new], ignore_index=True)
                     df_combined.to_excel(writer, sheet_name=sheet, index=False)
                 else:
@@ -51,8 +87,7 @@ def index():
 
             writer.save()
             writer.close()
-            flash("✅ Data successfully written to your OneDrive Excel file.", 'success')
-
+            flash("✅ Data successfully saved to Excel file.", 'success')
         except json.JSONDecodeError:
             flash("Invalid JSON input. Please check your formatting.", 'error')
         except Exception as e:
@@ -61,8 +96,3 @@ def index():
         return redirect('/')
 
     return render_template('index.html')
-
-
-if __name__ == '__main__':
-    # Important for platforms like Render
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
