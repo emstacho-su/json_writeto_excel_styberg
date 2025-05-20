@@ -17,9 +17,10 @@ EXCEL_PATH = None  # Will be set dynamically on first save
 SHEET_MAP = {
     "Null Hypothesis": ["work_instruction", "clause", "statistical_test", "p_value", "effect_size", "compliance"],
     "Material Evidence": ["work_instruction", "clause", "evidence_summary", "evidence_grade", "coverage"],
-    "Gap Severity": ["work_instruction", "clause": "gap_severity", "gap_description"],
+    "Gap Severity": ["work_instruction", "clause", "gap_severity", "gap_description"],
     "Longitudinal Tracking": ["work_instruction", "metric", "value", "longitudinal_notes"]
 }
+
 
 
 def get_excel_path():
