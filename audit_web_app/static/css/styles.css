@@ -1,0 +1,61 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --success-color: #27ae60;
+    --warning-color: #f1c40f;
+    --danger-color: #e74c3c;
+}
+
+body {
+    padding-top: 80px;
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.brand-logo {
+    height: 50px;
+    margin-right: 15px;
+}
+
+.navbar-nav {
+    align-items: center;
+}
+
+.card {
+    margin-bottom: 25px;
+    border: none;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+.highlight {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 15px 0;
+}
+
+.prompt-section {
+    background-color: #e9f5ff;
+    border-left: 4px solid var(--secondary-color);
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.json-example {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+}

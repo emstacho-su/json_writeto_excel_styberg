@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}AI Analyzer - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <h1 class="mb-4">AI-Powered Compliance Analysis</h1>
+    
+    <div class="prompt-section">
+        <h4>Optimized ISO 9001:2015 Scientific Audit Prompt</h4>
+        <p class="text-muted">With JSON Output & Cross-Doc Context from Work Instruction List</p>
+        
+        <div class="mt-4">
+            <h5>Audit Workflow</h5>
+            <ol>
+                <li>Upload work instruction document</li>
+                <li>Provide reference documents list</li>
+                <li>Select analysis scope (Full/Partial)</li>
+                <li>Generate AI analysis report</li>
+            </ol>
+        </div>
+
+        <div class="mt-4">
+            <h5>Scientific Hypothesis Framework</h5>
+            <pre class="json-example">
+{
+  "Null Hypothesis Testing": [
+    {
+      "work_instruction": "INS-XXXX",
+      "clause": "X.Y",
+      "statistical_test": "test_type=value",
+      "p_value": "numeric_value",
+      "effect_size": "numeric_value",
+      "compliance": "pass/reject/monitor/NA"
+    }
+  ],
+  // Other sections follow same pattern
+}</pre>
+        </div>
+
+        <div class="mt-4">
+            <div class="alert alert-info">
+                <strong>Heat Treat Specific Analysis:</strong>
+                <ul class="mt-2">
+                    <li>AMS 2750E compliance checks</li>
+                    <li>Delta-T monitoring validation</li>
+                    <li>CQI-9 scoring analysis</li>
+                    <li>Enhanced traceability verification</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
