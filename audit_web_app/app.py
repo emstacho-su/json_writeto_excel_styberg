@@ -1,0 +1,60 @@
+pip install flask pandas openpyxl
+
+from flask import Flask, render_template, request, redirect, flash
+import pandas as pd
+import json
+from openpyxl import load_workbook
+import os
+
+app = Flask(__name__)
+app.secret_key = 'secure-key'  # Required for flashing messages
+
+EXCEL_PATH = 'audit_data.xlsx'
+
+SHEET_MAP = {
+    "Null Hypothesis": ["work_instruction", "clause", "statistical_test", "p_value", "effect_size", "compliance"],
+    "Material Evidence": ["work_instruction", "clause", "evidence_summary", "evidence_grade", "coverage"],
+    "Gap Severity": ["work_instruction", "clause", "gap_severity", "gap_description"],
+    "Longitudinal Tracking": ["work_instruction", "metric", "value", "longitudinal_notes"]
+}
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        json_data = request.form.get('json_input')
+        try:
+            data = json.loads(json_data)
+
+            if not os.path.exists(EXCEL_PATH):
+                flash(f"Excel file not found at {EXCEL_PATH}", 'error')
+                return redirect('/')
+
+            book = load_workbook(EXCEL_PATH)
+            writer = pd.ExcelWriter(EXCEL_PATH, engine='openpyxl', mode='a', if_sheet_exists='overlay')
+            writer.book = book
+
+            for sheet, columns in SHEET_MAP.items():
+                if sheet not in data:
+                    continue
+
+                df_new = pd.DataFrame(data[sheet])
+                df_new = df_new[columns]
+
+                if sheet in book.sheetnames:
+                    df_existing = pd.read_excel(EXCEL_PATH, sheet_name=sheet)
+                    df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+                    df_combined.to_excel(writer, sheet_name=sheet, index=False)
+                else:
+                    df_new.to_excel(writer, sheet_name=sheet, index=False)
+
+            writer.save()
+            writer.close()
+            flash("Data successfully written to Excel.", 'success')
+        except json.JSONDecodeError:
+            flash("Invalid JSON input. Please check your formatting.", 'error')
+        except Exception as e:
+            flash(f"An error occurred: {str(e)}", 'error')
+
+        return redirect('/')
+
+    return render_template('index.html')

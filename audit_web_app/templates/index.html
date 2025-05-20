@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ISO 9001 Audit JSON Uploader</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        textarea { width: 100%; height: 300px; font-family: monospace; }
+        .msg { padding: 10px; margin-bottom: 20px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>ISO 9001:2015 Audit JSON Uploader</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="msg {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    <form method="POST">
+        <label for="json_input">Paste JSON Below:</label><br>
+        <textarea name="json_input" placeholder='{"Null Hypothesis": [...], ...}' required></textarea><br><br>
+        <button type="submit">Submit to Excel</button>
+    </form>
+</body>
+</html>
