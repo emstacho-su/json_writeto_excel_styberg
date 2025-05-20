@@ -1,5 +1,3 @@
-pip install flask pandas openpyxl
-
 from flask import Flask, render_template, request, redirect, flash
 import pandas as pd
 import json
@@ -9,7 +7,10 @@ import os
 app = Flask(__name__)
 app.secret_key = 'secure-key'  # Required for flashing messages
 
-EXCEL_PATH = 'audit_data.xlsx'
+# Save path to OneDrive (your provided path)
+ONEDRIVE_PATH = r"C:\Users\estachowiak\OneDrive - styberg.com"
+EXCEL_FILENAME = "audit_data.xlsx"
+EXCEL_PATH = os.path.join(ONEDRIVE_PATH, EXCEL_FILENAME)
 
 SHEET_MAP = {
     "Null Hypothesis": ["work_instruction", "clause", "statistical_test", "p_value", "effect_size", "compliance"],
@@ -26,7 +27,7 @@ def index():
             data = json.loads(json_data)
 
             if not os.path.exists(EXCEL_PATH):
-                flash(f"Excel file not found at {EXCEL_PATH}", 'error')
+                flash(f"Excel file not found at:\n{EXCEL_PATH}", 'error')
                 return redirect('/')
 
             book = load_workbook(EXCEL_PATH)
@@ -49,7 +50,7 @@ def index():
 
             writer.save()
             writer.close()
-            flash("Data successfully written to Excel.", 'success')
+            flash("✅ Data successfully written to your OneDrive Excel file.", 'success')
         except json.JSONDecodeError:
             flash("Invalid JSON input. Please check your formatting.", 'error')
         except Exception as e:
@@ -58,3 +59,6 @@ def index():
         return redirect('/')
 
     return render_template('index.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
